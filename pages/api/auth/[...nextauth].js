@@ -24,7 +24,9 @@ export default NextAuth({
         Auth0Provider({
             clientId: process.env.AUTH0_CLIENT_ID,
             clientSecret: process.env.AUTH0_CLIENT_SECRET,
-            issuer: process.env.AUTH0_ISSUER
+            issuer: process.env.AUTH0_ISSUER,
+
+            // authorizationUrl: `http://${process.env.AUTH0_DOMAIN}/authorize?response_type=code&prompt=consent`
         }),
         GitHubProvider({
             clientId: process.env.GITHUB_ID,
@@ -34,14 +36,14 @@ export default NextAuth({
 
         TwitterProvider({
             clientId: process.env.TWITTER_CLIENT_ID,
-            clientSecret: process.env.TWITTER_CLIENT_SECRET
+            clientSecret: process.env.TWITTER_CLIENT_SECRET,
+            version: "2.0",
         })
 
     ],
     jwt: {
         encryption: true,
     },
-    // secret:"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",
     callbacks: {
         async jwt({ token, account }) {
             // Persist the OAuth access_token to the token right after signin
