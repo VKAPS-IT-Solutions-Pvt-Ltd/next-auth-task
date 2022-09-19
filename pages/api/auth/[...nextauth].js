@@ -4,6 +4,7 @@ import Auth0Provider from "next-auth/providers/auth0";
 import GitHubProvider from "next-auth/providers/github"
 import TwitterProvider from "next-auth/providers/twitter";
 import FacebookProvider from "next-auth/providers/facebook";
+import InstagramProvider from "next-auth/providers/instagram";
 export default NextAuth({
     providers: [
         GoogleProvider({
@@ -25,12 +26,14 @@ export default NextAuth({
             clientId: process.env.AUTH0_CLIENT_ID,
             clientSecret: process.env.AUTH0_CLIENT_SECRET,
             issuer: process.env.AUTH0_ISSUER,
-
+            domain: process.env.AUTH0_DOMAIN
+            // http://localhost:3000/api/auth/callback, http://localhost:3000/api/auth/callback/auth0
             // authorizationUrl: `http://${process.env.AUTH0_DOMAIN}/authorize?response_type=code&prompt=consent`
         }),
         GitHubProvider({
             clientId: process.env.GITHUB_ID,
             clientSecret: process.env.GITHUB_SECRET
+            // http://localhost:3000/api/auth/callback/github
 
         }),
 
@@ -38,8 +41,11 @@ export default NextAuth({
             clientId: process.env.TWITTER_CLIENT_ID,
             clientSecret: process.env.TWITTER_CLIENT_SECRET,
             version: "2.0",
-        })
-
+        }),
+        InstagramProvider({
+            clientId: process.env.INSTAGRAM_CLIENT_ID,
+            clientSecret: process.env.INSTAGRAM_CLIENT_SECRET
+          })
     ],
     jwt: {
         encryption: true,
@@ -51,6 +57,11 @@ export default NextAuth({
                 token.accessToken = account.access_token
             }
             return token
+        },
+        async session({ session, token, user }) {
+            // Send properties to the client, like an access_token from a provider.
+            session.accessToken = token.accessToken
+            return session
         },
         redirect: async (url, _baseUrl) => {
             if (url === '/profile') {

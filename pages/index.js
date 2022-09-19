@@ -2,7 +2,9 @@ import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function Component() {
   const { data: session } = useSession()
-  console.log("process.env.GOOGLE_CLIENT_ID", process.env.GOOGLE_CLIENT_ID)
+  // const logout = ()=>{
+  //   session=""
+  // }
   if (session) {
     return (
       <>
